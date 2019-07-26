@@ -2,7 +2,8 @@ import random
 import sys
 import math
 
-class Sonar:
+
+class SonarBoard:
     def getNewBoard(self):
         # Create a new 60x15 board data structure.
         board = []
@@ -40,7 +41,7 @@ class Sonar:
             for column in range(60):
                 boardRow += board[column][row]
 
-            print('%s%s %s %s' % (extraSpace, row, boardRow, row))
+            print('%s %s %s %s' % (extraSpace, row, boardRow, row))
 
         # Print the numbers across the bottom of the board.
         print()
@@ -60,7 +61,7 @@ class Sonar:
         # Return True if the coordinates are on the board; otherwise, return False.
         return x >= 0 and x <= 59 and y >= 0 and y <= 14
 
-    def makeMove(board, chests, x, y):
+    def makeMove(self, board, chests, x, y):
         # Change the board data structure with a sonar device character. Remove treasure chests from the chests list as they are found.
         # Return False if this is an invalid move.
         # Otherwise, return the string of the result of this move.
@@ -80,10 +81,10 @@ class Sonar:
         else:
             if smallestDistance < 10:
                 board[x][y] = str(smallestDistance)
-                return ['Treasure detected at a distance of %s from the sonar device.' % (smallestDistance).encode()]
+                print('Treasure detected at a distance of %s from the sonar device.' % (smallestDistance))
             else:
                 board[x][y] = 'X'
-                return 'Sonar did not detect anything. All treasure chests out of range.'
+                print('Sonar did not detect anything. All treasure chests out of range.')
 
 
     def enterPlayerMove(self, previousMoves):
@@ -104,69 +105,49 @@ class Sonar:
 
             print('Enter a number from 0 to 59, a space, then a number from 0 to 14.')
 
+    def showInstructions(self):
+        print('''Instructions:
+    You are the captain of the Simon, a treasure-hunting ship. Your current mission
+    is to use sonar devices to find three sunken treasure chests at the bottom of
+    the ocean. But you only have cheap sonar that finds distance, not direction.
 
-    numberOfPlayers = 2
-    names = []
-    for i in range(int(numberOfPlayers)):
-        print("Enter the next player's name")
-        next_name = input()
-        names.append(next_name)
-        print("Players:" + str(names))
-    Player1 = str(names[0])
-    Player2 = str(names[1])
-    randomPlayer = random.choice(names)
-    lastPlayer = randomPlayer
+    Enter the coordinates to drop a sonar device. The ocean map will be marked with
+    how far away the nearest chest is, or an X if it is beyond the sonar device's
+    range. For example, the C marks are where chests are. The sonar device shows a
+    3 because the closest chest is 3 spaces away.
 
-    while True:
-        # Game setup
-        sonarDevices = 20
-        theBoard = getNewBoard()
-        theChests = getRandomChests(3)
-        drawBoard(theBoard)
-        previousMoves = []
-        turn1 = 0
-        turn2 = 0
+    1 2 3
+    012345678901234567890123456789012
 
-        while sonarDevices > 0:
-            # Show sonar device and chest statuses.
-            if turn1 == 0 and turn2 == 0:
-                turn1 += 1
-                return ['%s  has %s sonar device(s) left. %s treasure chest(s) remaining.' % (Player1, sonarDevices, len(theChests)).encode()]
-            else:
-                if turn1 > turn2:
-                    print('%s  has %s sonar device(s) left. %s treasure chest(s) remaining.' % (Player2, sonarDevices, len(theChests)))
-                    turn2 += 1
-                else:
-                    print('%s  has %s sonar device(s) left. %s treasure chest(s) remaining.' % (Player1, sonarDevices, len(theChests)))
-                    turn1 += 1
+    0 ~~~~`~```~`~``~~~``~`~~``~~~``~`~ 0
+    1 ~`~`~``~~`~```~~~```~~`~`~~~`~~~~ 1
+    2 `~`C``3`~~~~`C`~~~~`````~~``~~~`` 2
+    3 ````````~~~`````~~~`~`````~`~``~` 3
+    4 ~`~~~~`~~`~~`C`~``~~`~~~`~```~``~ 4
 
-            x, y = enterPlayerMove(previousMoves)
-            previousMoves.append([x, y]) # We must track all moves so that sonar devices can be updated.
+    012345678901234567890123456789012
+    1 2 3
+    (In the real game, the chests are not visible in the ocean.)
 
-            moveResult = makeMove(theBoard, theChests, x, y)
-            if moveResult == False:
-                continue
-            else:
-                if moveResult == 'You have found a sunken treasure chest!':
-                    # Update all the sonar devices currently on the map.
-                    for x, y in previousMoves:
-                        makeMove(theBoard, theChests, x, y)
-                drawBoard(theBoard)
-                print(moveResult)
 
-            if len(theChests) == 0:
-                print('You have found all the sunken treasure chests! Congratulations and good game!')
-                break
+    When you drop a sonar device directly on a chest, you retrieve it and the other
+    sonar devices update to show how far away the next nearest chest is. The chests
+    are beyond the range of the sonar device on the left, so it shows an X.
 
-            sonarDevices -= 1
+    1 2 3
+    012345678901234567890123456789012
 
-        if sonarDevices == 0:
-            print('We\'ve run out of sonar devices! Now we have to turn the ship around and head')
-            print('for home with treasure chests still out there! Game over.')
-            print(' The remaining chests were here:')
-            for x, y in theChests:
-                print(' %s, %s' % (x, y))
+    0 ~~~~`~```~`~``~~~``~`~~``~~~``~`~ 0
+    1 ~`~`~``~~`~```~~~```~~`~`~~~`~~~~ 1
+    2 `~`X``7`~~~~`C`~~~~`````~~``~~~`` 2
+    3 ````````~~~`````~~~`~`````~`~``~` 3
+    4 ~`~~~~`~~`~~`C`~``~~`~~~`~```~``~ 4
 
-        print('Do you want to play again? (yes or no)')
-        if not input().lower().startswith('y'):
-            sys.exit()
+    012345678901234567890123456789012
+    1 2 3
+
+    The treasure chests don't move around. Sonar devices can detect treasure chests
+    up to a distance of 9 spaces. Try to collect all 3 chests before running out of
+    sonar devices. Good luck!
+    Press 'enter' to continue...''')
+        input()
