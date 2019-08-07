@@ -2,11 +2,11 @@
 
 import random
 import sys
-import math
 from SonarModule import SonarBoard
 
 game = SonarBoard()
 
+# Where the player is asked if they want to see instructions for the game
 
 print('S O N A R - 2 player edition!')
 print()
@@ -17,11 +17,14 @@ if input().lower().startswith('y'):
 
 numberOfPlayers = 2
 names = []
+
+# This loop asks for the player name twice
 for i in range(int(numberOfPlayers)):
     print("Enter the next player's name")
     next_name = input()
     names.append(next_name)
     print("Players:" + str(names))
+
 Player1 = str(names[0])
 Player2 = str(names[1])
 randomPlayer = random.choice(names)
@@ -37,11 +40,13 @@ while True:
     theChests = game.getRandomChests(3)
     game.drawBoard(theBoard)
     previousMoves = []
+
+    # Move counter to help determine which player's move it is
     turn1 = 0
     turn2 = 0
 
     while sonarDevices > int(0):
-        # Show sonar device and chest statuses.
+        # Determines which player's turn it is
         if turn1 == 0 and turn2 == 0:
             print('%s  has %s sonar device(s) left. %s treasure chest(s) remaining.' % (Player1, sonarDevices, len(theChests)))
             turn1 += 1
@@ -52,7 +57,7 @@ while True:
             else:
                 print('%s  has %s sonar device(s) left. %s treasure chest(s) remaining.' % (Player1, sonarDevices, len(theChests)))
                 turn1 += 1
-
+        # Show sonar device and chest statuses
         x, y = game.enterPlayerMove(previousMoves)
         previousMoves.append([x, y]) # We must track all moves so that sonar devices can be updated.
 
@@ -73,6 +78,7 @@ while True:
 
         sonarDevices -= 1
 
+    # In the senario that the players lose (run out of sonar devices)
     if sonarDevices == 0:
         print('We\'ve run out of sonar devices! Now we have to turn the ship around and head')
         print('for home with treasure chests still out there! Game over.')
@@ -80,6 +86,7 @@ while True:
         for x, y in theChests:
             print(' %s, %s' % (x, y))
 
+    #Asks player if they want to replay
     print('Do you want to play again? (yes or no)')
     if not input().lower().startswith('y'):
         sys.exit()
