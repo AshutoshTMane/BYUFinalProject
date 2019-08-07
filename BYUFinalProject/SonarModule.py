@@ -1,3 +1,5 @@
+#imported in Sonar.py - includes most of the game's functions
+
 import random
 import sys
 import math
@@ -106,6 +108,7 @@ class SonarBoard:
             print('Enter a number from 0 to 59, a space, then a number from 0 to 14.')
 
     def showInstructions(self):
+        #prints instructions if the user requests it
         print('''Instructions:
     You are the captain of the Simon, a treasure-hunting ship. Your current mission
     is to use sonar devices to find three sunken treasure chests at the bottom of
