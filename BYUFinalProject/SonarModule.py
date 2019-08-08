@@ -110,7 +110,7 @@ class SonarBoard:
     def showInstructions(self):
         #prints instructions if the user requests it
         print('''Instructions:
-    You are the captain of the Simon, a treasure-hunting ship. Your current mission
+    You are the captains of the Simon, a treasure-hunting ship. Your current mission
     is to use sonar devices to find three sunken treasure chests at the bottom of
     the ocean. But you only have cheap sonar that finds distance, not direction.
 
